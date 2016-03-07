@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<openerp>
+    <data>
+        <record id="view_manual_leadtime_form" model="ir.ui.view">
+            <field name="name">Input Lead Time</field>
+            <field name="model">manual.input.lead.time</field>
+            <field name="arch" type="xml">
+                <form string="Input Lead Time">
+                    <group>
+                        <field name="lead_time_input" />
+                    </group>
+                    <footer>
+                        <button name="change_lead_time" string="_Apply" type="object" class="oe_highlight"/>
+                        or
+                        <button string="_Cancel" class="oe_link" special="cancel" />
+                    </footer>
+                </form>
+            </field>
+        </record>
+
+        <record id="action_view_manual_leadtime" model="ir.actions.act_window">
+            <field name="name">Input Lead Time</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">manual.input.lead.time</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_manual_leadtime_form"/>
+            <field name="code">action = self.input_lead_time(cr, uid, context.get('active_ids', []), context=context)</field>
+            <field name="target">new</field>
+        </record>
+
+    </data>
+</openerp>

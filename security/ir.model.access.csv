@@ -1,0 +1,10 @@
+name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+autolines.autoline_rule_sales,autolines.model_autoline_rule,base.group_sale_salesman,1,0,0,0
+autolines.autoline_autoline_sales,autolines.model_autoline_autoline,base.group_sale_salesman,1,0,0,0
+autolines.autoline_rule_manager,autolines.model_autoline_rule,base.group_sale_manager,1,1,1,1
+autolines.autoline_autoline_manager,autolines.model_autoline_autoline,base.group_sale_manager,1,1,1,1
+autolines.autoline_rule_purchase,autolines.model_autoline_rule,purchase.group_purchase_user,1,0,0,0
+autolines.autoline_autoline_purchase,autolines.model_autoline_autoline,purchase.group_purchase_user,1,0,0,0
+autolines.autoline_rule_purchase_manager,autolines.model_autoline_rule,purchase.group_purchase_manager,1,1,1,1
+autolines.autoline_autoline_purchase_manager,autolines.model_autoline_autoline,purchase.group_purchase_manager,1,1,1,1
+

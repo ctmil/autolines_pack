@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <openerp>
+    <data>
+        <!-- Add Auto Line Rule ID field to existing view -->
+        <record model="ir.ui.view" id="product_autoline_rules_form_view">
+            <field name="name">Product.rule_ids</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Auto Lines">
+                        <group>
+                            <field name="rule_ids" domain="[('id','in',autoline.autoline.product_id)]"/>
+                        </group>
+                    </page>
+                </notebook>
+            </field>
+        </record>
+
+        <!-- Add a new product attribute field to existing view -->
+        <!-- record model="ir.ui.view" id="product_autoline_rules_form_view">
+            <field name="name">product.attribute_isNote</field>
+            <field name="model">product.template</field>
+            <field name="inherit_id" ref="product.product_template_form_view"/>
+            <field name="arch" type="xml">
+                <field name="list_price" position="before">
+                    <field name="product_owner_id"/>
+                </field>
+            </field>
+        </record -->
+    </data>
+ </openerp>

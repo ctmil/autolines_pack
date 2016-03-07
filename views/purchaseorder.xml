@@ -1,0 +1,35 @@
+<openerp>
+    <data>
+        <!-- The function and view for running AutoLine rules on this order or Quote -->
+        <record id="view_autoline_purchase_order_form" model="ir.ui.view">
+            <field name="name">autoline.purchase.order.form.view</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Products']/group[@class='oe_subtotal_footer oe_right']/field[@name='amount_total']" position="after">
+                    <group style="width: 65%">
+                        <div>
+                            <!-- button name="autoline_purchase_run" string="Run Auto Lines" type="object"
+                                class="oe_edit_only" / -->
+                            <button name="autoline_purchase_run" string="Run Auto Lines" type="object"
+                                attrs="{'invisible':['|',('state','not in',('draft','sent','bid'))]}"/>
+                            <br/>
+                        </div>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="purchase_order_with_customer_form" model="ir.ui.view">
+            <field name="name">purchase.order.form.view</field>
+            <field name="model">purchase.order</field>
+            <field name="inherit_id" ref="purchase.purchase_order_form"/>
+            <field name="arch" type="xml">
+                <field name="picking_type_id" position="after">
+                    <field name="customer_id"/>
+                </field>
+            </field>
+        </record>
+
+    </data>
+</openerp>

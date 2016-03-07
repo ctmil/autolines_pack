@@ -1,0 +1,47 @@
+<openerp>
+    <data>
+        <!-- The function and view for running AutoLine rules on this order or Quote -->
+        <record id="view_order_withcarrier_form" model="ir.ui.view">
+            <field name="name">autoline.sale.order.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//group[@name='sale_total']" position="after">
+                    <group style="width: 65%%">
+                        <div>
+                            <button name="autoline_run" string="Run Auto Lines" type="object"
+                                class="oe_edit_only"
+                                attrs="{'invisible':['|',('state','not in',('draft','sent'))]}"/>
+                            <br/>
+                        </div>
+                    </group>
+                </xpath>
+            </field>
+        </record>
+
+        <record id="sales_order_with_product_owner_form" model="ir.ui.view">
+            <field name="name">sale.order.form.view</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <field name="partner_shipping_id" position="after">
+                    <!-- field name="product_owner_id"/ -->
+                    <field name="first_article"/>
+                </field>
+            </field>
+        </record>
+
+        <!-- Add the Delay for Order Lines -->
+        <record id="view_order_line_with_delay_tree" model="ir.ui.view">
+            <field name="name">x_view_order_line_w_delay</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                <xpath expr="//page[@string='Order Lines']/field[@name='order_line']/tree[@string='Sales Order Lines']/field[@name='discount']" position="after">
+                    <field name="delay" invisible="1"/>
+                    <field name="is_autoline" invisible="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</openerp>

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <openerp>
+    <data>
+        <!-- Add Auto Line Rule ID field to existing view -->
+        <record model="ir.ui.view" id="product_ctg_autoline_rules_form_view">
+            <field name="name">Product_Ctg.rule_ids</field>
+            <field name="model">product.category</field>
+            <field name="inherit_id" ref="product.product_category_form_view"/>
+            <field name="arch" type="xml">
+                <sheet>
+                    <group>
+                        <field name="rule_ids" domain="[('id','in',autoline.autoline.product_ctg_id)]"/>
+                    </group>
+                </sheet>
+            </field>
+        </record>
+    </data>
+ </openerp>

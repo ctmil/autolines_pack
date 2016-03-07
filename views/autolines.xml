@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        <!-- window action -->
+        <!--
+            The following tag is an action definition for a "window action",
+            that is an action opening a view or a set of views
+        -->
+
+        <record model="ir.actions.act_window" id="autoline_list_action">
+            <field name="name">Auto lines</field>
+            <field name="res_model">autoline.autoline</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="help" type="html">
+                <p class="oe_view_nocontent_create">Create your first Auto Line rule set.
+                </p>
+            </field>
+        </record>
+
+
+        <!-- Menu under settings, for now -->
+        <menuitem id="base.menu_autoline_config" name="Auto Lines" parent="base.menu_config" groups="base.group_sale_salesman,base.group_sale_manager"/>
+        <!-- A first level in the left side menu is needed
+             before using action= attribute -->
+       <menuitem id="base.menu_autoline_setup" name="Master Auto Lines Input"
+                  parent="base.menu_autoline_config" action="autoline_list_action"/>
+        <!-- the following menuitem should appear *after*
+             its parent openacademy_menu and *after* its
+             action course_list_action -->
+        <!-- <menuitem id="base.menu_autoline_menu" name="Auto Lines" parent="base.menu_autoline_config"
+                  action="autoline_list_action"/> -->
+        <!-- Full id location:
+             action="autoline.rule_list_action"
+             It is not required when it is the same module -->
+
+        <record model="ir.ui.view" id="autoline_form_view">
+            <field name="name">autoline.form</field>
+            <field name="model">autoline.autoline</field>
+            <field name="arch" type="xml">
+                <form string="Auto Line Form">
+                    <sheet>
+                        <group>
+                            <field name="name"/>
+                            <field name="sales_purchase"/>
+                            <field name="active"/>
+                            <field name="company_wide"/>
+                            <field name="supplier_id"/>
+                            <field name="customer_id"/>
+                            <field name="product_ctg_id"/>
+                            <field name="product_id"/>
+                            <field name="sku_id"/>
+                            <field name="sku_option"/>
+                            <field name="sku_option_value"/>
+                        </group>
+                        <notebook>
+                            <page string="Rules">
+                                <field name="rule_ids">
+                                    <tree string="Registered Rules">
+                                        <field name="name"/>
+                                        <field name="model_id"/>
+                                        <field name="model_subset"/>
+                                        <field name="model_field"/>
+                                        <field name="operator"/>
+                                        <field name="chk_value"/>
+                                        <field name="active"/>
+                                    </tree>
+                                </field>
+                            </page>
+                            <page string="Auto Line Description">
+                                <field name="description"/>
+                            </page>
+                        </notebook>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="autoline_tree_view">
+            <field name="name">autoline.tree</field>
+            <field name="model">autoline.autoline</field>
+            <field name="arch" type="xml">
+                <tree string="Registered Rules">
+                    <field name="name"/>
+                    <field name="sales_purchase"/>
+                    <field name="active"/>
+                    <field name="company_wide"/>
+                    <field name="supplier_id"/>
+                    <field name="customer_id"/>
+                    <field name="product_ctg_id"/>
+                    <field name="product_id"/>
+                    <field name="sku_id"/>
+                    <field name="sku_option" visible="False"/>
+                    <field name="sku_option_value" visible="False"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="autoline_search_view">
+            <field name="name">autoline.search</field>
+            <field name="model">autoline.autoline</field>
+            <field name="arch" type="xml">
+                <search>
+                    <field name="sales_purchase"/>
+                    <field name="name"/>
+                    <field name="description"/>
+                    <field name="supplier_id"/>
+                    <field name="customer_id"/>
+                    <field name="product_ctg_id"/>
+                    <field name="product_id"/>
+                    <field name="sku_id"/>
+                    <field name="sku_option"/>
+                    <field name="sku_option_value"/>
+                </search>
+            </field>
+        </record>
+
+        <!-- Rule form view -->
+        <record model="ir.ui.view" id="rule_form_view">
+            <field name="name">rule.form</field>
+            <field name="model">autoline.rule</field>
+            <field name="arch" type="xml">
+                <form string="Rule Form">
+                    <sheet>
+                        <group>
+                            <group string="Rule definition">
+                                <!--<field name="rule_id"/> -->
+                                <field name="name" visible="1"/>
+                                <field name="active"/>
+                                <field name="model_id"/>
+                                <field name="model_subset"/>
+                                <field name="model_field"/>
+                                <field name="operator"/>
+                                <field name="chk_value"/>
+                            </group>
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <record model="ir.ui.view" id="rule_tree_view">
+            <field name="name">rule.tree</field>
+            <field name="model">autoline.rule</field>
+            <field name="arch" type="xml">
+                <tree string="Rules">
+                    <!--<field name="rule_id"/>-->
+                    <field name="name"/>
+                    <field name="active"/>
+                    <field name="model_id"/>
+                </tree>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="rule_list_action">
+            <field name="name">Rules</field>
+            <field name="res_model">autoline.rule</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+        </record>
+
+        <menuitem id="rule_menu" name="Auto Line Rules"
+                  parent="base.menu_autoline_config"
+                  action="rule_list_action"/>
+        </data>
+    </openerp>

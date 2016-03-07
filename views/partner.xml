@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <openerp>
+    <data>
+        <!-- Add Auto Line Rule ID field to existing view -->
+        <record model="ir.ui.view" id="partner_autoline_rules_form_view">
+            <field name="name">partner.rule_ids</field>
+            <field name="model">res.partner</field>
+            <field name="inherit_id" ref="base.view_partner_form"/>
+            <field name="arch" type="xml">
+                <notebook position="inside">
+                    <page string="Auto Lines">
+                        <group>
+                            <!-- field name="rule_ids" domain="[('id','in',autoline.autoline.partner_id)]"/ -->
+                            <field name="rule_ids" />
+                        </group>
+                    </page>
+                </notebook>
+               <!--<xpath expr="//notebook/page[@name='sales_purchases']/group/group/field[@name='supplier']" position="after">
+			        <field name="product_owner" />
+               </xpath>-->
+           </field>
+       </record>
+    </data>
+ </openerp>
