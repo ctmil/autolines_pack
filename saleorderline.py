@@ -103,7 +103,8 @@ class sale_order_line(models.Model):
 
         # changed from product.template to product.product, might do that for alle the line creates in the code
 	# creates product pack
-	name_pack = self.order_id.name + '#' + line.product_id.ntty_id + '#' + str(line.id)
+	# name_pack = self.order_id.name + '#' + line.product_id.ntty_id + '#' + str(line.id)
+	name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')]).id
         info_prod_id = self.env['product.product'].search([('name', '=', name_pack)])
 	if not info_prod_id:
@@ -252,14 +253,15 @@ class sale_order_line(models.Model):
                 sku_id = current_obj.sku_id.id
                 #sku_del = self.env['product.template'].search([('id', '=', sku_id)]).sale_delay
                 # line_exists = self.order_line.search([('product_id', '=', sku_id), ('order_id', '=', self.id)])
-		info_prod_id = self.env['product.product'].search([('name','=',self.order_id.name + '#' + str(line.id))])
+		namepack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + line.order_id.name
+		info_prod_id = self.env['product.product'].search([('name','=',namepack)])
 		if not info_prod_id:
 	                vals_product = {
-				'name': self.order_id.name + '#'  + str(line.id),
+				'name': namepack,
 				'is_pack': True,
 				'type': 'product',
 				'uom_id': 1,
-				'default_code': self.name + '#' + line.product_id.ntty_id
+				'default_code': namepack
 				}
 			info_prod_id = self.env['product.product'].create(vals_product)
 	                vals_pack = {
