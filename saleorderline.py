@@ -105,7 +105,8 @@ class sale_order_line(models.Model):
 	# creates product pack
 	# name_pack = self.order_id.name + '#' + line.product_id.ntty_id + '#' + str(line.id)
 	name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
-        info_prd_id = self.env['product.product'].search([('name', '=', 'info:')]).id
+        info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
+	info_prd_id = info_prd_id[0].id
         info_prod_id = self.env['product.product'].search([('name', '=', name_pack)])
 	if not info_prod_id:
 		vals_product = {
