@@ -16,6 +16,7 @@ class Product(models.Model):
 class ProductProduct(models.Model):
     _inherit = 'product.product'
 
+    @api.one
     def _compute_pack_contents(self):
 	return_value = ''
 	if self.is_pack:
