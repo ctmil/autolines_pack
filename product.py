@@ -12,3 +12,15 @@ class Product(models.Model):
     rule_ids = fields.One2many('autoline.autoline', 'product_id',  string="Auto Line Rules", readonly=True)
     # product_owner_id = fields.Many2one('res.partner', string="Product Owner", domain=[('product_owner', '=', True)])
     # product_owner_id = fields.Many2one('res.partner', string="Product Owner")
+
+class ProductProduct(models.Model):
+    _inherit = 'product.product'
+
+    def _compute_pack_contents(self):
+	return_value = ''
+	if self.is_pack:
+		for product_pack in self.wk_product_pack:
+			return_value += product_pack.name + ' - ' + product_pack.description + '\n'
+	self.pack_contents = return_value
+
+    pack_contents = fields.Text(string='Pack Contents',compute=_compute_pack_contents)
