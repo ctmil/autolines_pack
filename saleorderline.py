@@ -33,6 +33,8 @@ _logger = logging.getLogger(__name__)
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
 
+    pack_id = fields.Many2one('product.product',string='Pack')
+
     @api.multi
     def autoline_sol_run(self):
         so_id = self.order_id.id
@@ -174,6 +176,10 @@ class sale_order_line(models.Model):
 		self.env['product.pack'].create(vals_pack)
 	
         _logger.info('Comments - Done')
+	vals = {
+		'pack_id': info_prod_id.id,
+		}
+	self.write(vals)
         #self._add_todo_lines
 
     @api.multi
