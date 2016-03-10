@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from openerp import fields, models
+from openerp import fields, models, api
 
 
 class Product(models.Model):
