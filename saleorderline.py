@@ -61,6 +61,8 @@ class sale_order_line(models.Model):
         weight = 0
         del_tot = 0
 	line = self
+	product_weight = self.product_id.weight
+	sqm_pcb = self.product_id.sqm_pcb
         # traverse the order lines, but we want the first line that is the PCB in question
         # Should in a later version use a filter to be sure we get correct item by using product category.
         # supports only one product per Quote.
@@ -116,7 +118,9 @@ class sale_order_line(models.Model):
 			'is_pack': True,
 			'type': 'product',
 			'uom_id': 1,
-			'default_code': self.name + '#' + line.product_id.ntty_id
+			'default_code': self.name + '#' + line.product_id.ntty_id,
+			'weight': product_weight,
+			'sqm_pcb': sqm_pcb,
 			}
 		info_prod_id = self.env['product.product'].create(vals_product)
 	        vals_pack = {
@@ -185,6 +189,8 @@ class sale_order_line(models.Model):
     @api.multi
     def _check_rule(self, autoline_objects, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line = None):
         res = False
+	product_weight = self.product_id.weight
+	sqm_pcb = self.product_id.sqm_pcb
         #current_obj = None
         for current_obj in autoline_objects:
             res = False
@@ -268,7 +274,9 @@ class sale_order_line(models.Model):
 				'is_pack': True,
 				'type': 'product',
 				'uom_id': 1,
-				'default_code': namepack
+				'default_code': namepack,
+				'weight': product_weight,
+				'sqm_pcb': sqm_pcb,
 				}
 			info_prod_id = self.env['product.product'].create(vals_product)
 	                vals_pack = {
