@@ -184,6 +184,7 @@ class sale_order_line(models.Model):
 		'pack_id': info_prod_id.id,
 		}
 	self.write(vals)
+	return info_prod_id.id
         #self._add_todo_lines
 
     @api.multi
