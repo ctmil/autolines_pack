@@ -114,6 +114,7 @@ class sale_order_line(models.Model):
         info_prod_id = self.env['product.product'].search([('name', '=', name_pack)])
 	if not info_prod_id:
 		vals_product = {
+			'active': False,
 			'name': name_pack,
 			'is_pack': True,
 			'type': 'product',
@@ -271,6 +272,7 @@ class sale_order_line(models.Model):
 		info_prod_id = self.env['product.product'].search([('name','=',namepack)])
 		if not info_prod_id:
 	                vals_product = {
+				'active': False,
 				'name': namepack,
 				'is_pack': True,
 				'type': 'product',
