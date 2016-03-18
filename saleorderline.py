@@ -111,7 +111,7 @@ class sale_order_line(models.Model):
 	name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
-        info_prod_id = self.env['product.product'].search([('name', '=', name_pack)])
+        info_prod_id = self.env['product.product'].search([('name', '=', name_pack),('active','=',False)])
 	if not info_prod_id:
 		vals_product = {
 			'active': False,
@@ -223,7 +223,7 @@ class sale_order_line(models.Model):
 
                 elif model.model == 'sale.order':
                     try:
-                        obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.id)])
+                        obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.order_id.id)])
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
@@ -249,8 +249,8 @@ class sale_order_line(models.Model):
                 sku_id = current_obj.sku_id.id
                 #sku_del = self.env['product.template'].search([('id', '=', sku_id)]).sale_delay
                 # line_exists = self.order_line.search([('product_id', '=', sku_id), ('order_id', '=', self.id)])
-		namepack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + line.order_id.name
-		info_prod_id = self.env['product.product'].search([('name','=',namepack)])
+		namepack = self.product_id.product_tmpl_id.name + '#' + str(self.product_uom_qty) + '#' + str(self.leadtime) + '#' + self.order_id.name
+		info_prod_id = self.env['product.product'].search([('name','=',namepack),('active','=',False)])
 		if not info_prod_id:
 	                vals_product = {
 				'active': False,
