@@ -134,25 +134,6 @@ class sale_order_line(models.Model):
         	self.env['product.pack'].create(vals_pack)
 
 
-        # count the total delay of the order
-        del_tot = 0
-        o_lines = self.order_id.order_line.search([('order_id', '=', self.id)])
-        for x in o_lines:
-	    if x.product_id.ntty_id:
-	            # del_tot = del_tot + x.out_delay
-	            del_tot = del_tot + x.calculated_leadtime
-	    else:
-	            del_tot = del_tot + x.delay
-
-        #self.order_line.create({'order_id': self.id, 'product_id': info_prod_id, 'description': 'info', 'price_unit': 0.00, 'name': 'The total lead time for this order will be ' + "{0:.0f}".format(del_tot) + ' days!', 'product_uom_qty': 0})
-	vals_pack = {
-		'description': 'The total leadtime for this order will be ' + "{0:.0f}".format(del_tot) + ' days!',
-		'product_quantity': 0,
-		'price': 0,
-		'wk_product_template': info_prod_id.product_tmpl_id.id,	
-		'product_name': info_prd_id,	
-		}
-	self.env['product.pack'].create(vals_pack)
         # get the number of the PCB ordered.
         q = 1
         for line in self.order_id.order_line:
