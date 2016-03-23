@@ -21,7 +21,11 @@ class ProductProduct(models.Model):
 	return_value = ''
 	if self.is_pack:
 		for product_pack in self.wk_product_pack:
-			return_value += product_pack.name or ' \n' + ' - ' + product_pack.description or ' \n' + ' \n'
+			if product_pack.name:
+				return_value += product_pack.name or '*' 
+			if product_pack.description:
+				return_value += ' - ' + product_pack.description or '*' 
+			return_value += ' \n'
 	self.pack_contents = return_value
 
     pack_contents = fields.Text(string='Pack Contents',compute=_compute_pack_contents)
