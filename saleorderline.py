@@ -221,6 +221,13 @@ class sale_order_line(models.Model):
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
                         print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
 
+                elif model.model == 'sale.order.line':
+                    try:
+                        obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.order_id.id)])
+                        _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
+                    except ValueError:
+                        _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
+                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
                 elif model.model == 'sale.order':
                     try:
                         obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.order_id.id)])

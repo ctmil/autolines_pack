@@ -71,6 +71,7 @@ class Rule(models.Model):
                                required=True, domain=['|', ('model', '=', 'res.partner'), '|',
                                                       ('model', '=', 'product.template'), '|',
                                                       ('model', '=', 'product.category'), '|',
+                                                      ('model', '=', 'sale.order.line'), '|',
                                                       ('model', '=', 'sale.order'), ('model', '=', 'purchase.order')])
     model_subset = fields.Selection([('customer', 'Customer'), ('supplier', 'Supplier'), ('product_owner', 'Product Owner')],
                                     string="Type of Partner",
