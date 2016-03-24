@@ -223,8 +223,21 @@ class sale_order_line(models.Model):
 
                 elif model.model == 'sale.order.line':
                     try:
-                        obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.id)])
-                        _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
+                        #obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.id)])
+			obj = None
+			if str(field.name) == 'categ_id':
+				categ_ids = self.env['product.category'].search([('name','ilike',str(value_to_check))])
+				if categ_ids:
+					for categ_id in categ_ids:
+						if categ_id.id == self.categ_id.id:
+							obj = self
+			if str(field.name) == 'product_brand_id':
+				brand_ids = self.env['product.brand'].search([('name','ilike',str(value_to_check))])
+				if brand_ids:
+					for brand_id in brand_ids:
+						if brand_id.id == self.product_brand_id.id:
+							obj = self
+                        #_logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
                         print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
