@@ -122,6 +122,8 @@ class sale_order_line(models.Model):
 			'default_code': self.name + '#' + line.product_id.ntty_id,
 			'weight': product_weight,
 			'sqm_pcb': sqm_pcb,
+			'taxes_id': [(6,0,[])],
+			'supplier_taxes_id': [(6,0,[])],
 			}
 		info_prod_id = self.env['product.product'].create(vals_product)
 	        vals_pack = {
@@ -281,6 +283,8 @@ class sale_order_line(models.Model):
 				'default_code': namepack,
 				'weight': product_weight,
 				'sqm_pcb': sqm_pcb,
+				'taxes_id': [(6,0,[])],
+				'supplier_taxes_id': [(6,0,[])],
 				}
 			info_prod_id = self.env['product.product'].create(vals_product)
 	                vals_pack = {
