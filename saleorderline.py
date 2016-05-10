@@ -124,6 +124,7 @@ class sale_order_line(models.Model):
 			'sqm_pcb': sqm_pcb,
 			'taxes_id': [(6,0,[])],
 			'supplier_taxes_id': [(6,0,[])],
+			'categ_id': 1,
 			}
 		info_prod_id = self.env['product.product'].create(vals_product)
 	        vals_pack = {
@@ -285,6 +286,7 @@ class sale_order_line(models.Model):
 				'sqm_pcb': sqm_pcb,
 				'taxes_id': [(6,0,[])],
 				'supplier_taxes_id': [(6,0,[])],
+				'categ_id': 1,
 				}
 			info_prod_id = self.env['product.product'].create(vals_product)
 	                vals_pack = {
