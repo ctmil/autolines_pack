@@ -147,7 +147,7 @@ class sale_order_line(models.Model):
 	        # self.order_line.create({'order_id': self.id, 'product_id': info_prod_id, 'description': 'info', 'price_unit': 0.00, 'name': 'The total price per unit is: ' + "{0:.2f}".format(self.amount_total/q), 'product_uom_qty': 0})
 		vals_pack = {
 			'description': 'The total price per unit is: ' + "{0:.2f}".format(self.order_id.amount_total/q),
-			'product_quantity': 0,
+			'product_quantity': 1,
 			'price': 0,
 			'wk_product_template': info_prod_id.product_tmpl_id.id,	
 			'product_name': info_prd_id,	
@@ -157,7 +157,7 @@ class sale_order_line(models.Model):
 	        # self.order_line.create({'order_id': self.id, 'product_id': info_prod_id, 'description': 'info', 'price_unit': 0.00, 'name': 'The total price per unit is: ' + "{0:.2f}".format(self.amount_total), 'product_uom_qty': 0})
 		vals_pack = {
 			'name': 'The total price per unit is: ' + "{0:.2f}".format(self.order_id.amount_total),
-			'product_quantity': 0,
+			'product_quantity': 1,
 			'price': 0,
 			'wk_product_template': info_prod_id.product_tmpl_id.id,	
 			'product_name': info_prd_id,	
