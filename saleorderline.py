@@ -125,6 +125,7 @@ class sale_order_line(models.Model):
 			'taxes_id': [(6,0,[])],
 			'supplier_taxes_id': [(6,0,[])],
 			'categ_id': 1,
+			'weight': line.product_id.weight,
 			}
 		info_prod_id = self.env['product.product'].create(vals_product)
 	        vals_pack = {
