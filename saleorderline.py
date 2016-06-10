@@ -110,9 +110,9 @@ class sale_order_line(models.Model):
 	# name_pack = self.order_id.name + '#' + line.product_id.ntty_id + '#' + str(line.id)
 	# name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
 	if line.product_id.article_part_number:
-		name_pack = line.product_id.article_part_number
+		name_pack = line.product_id.article_part_number + ' - ' + line.incoterm.code
 	else:
-		name_pack = line.product_id.name
+		name_pack = line.product_id.name + ' - ' + line.incoterm.code
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
         info_prod_id = self.env['product.product'].search([('name', '=', name_pack),('active','=',False)])
@@ -279,9 +279,9 @@ class sale_order_line(models.Model):
                 # line_exists = self.order_line.search([('product_id', '=', sku_id), ('order_id', '=', self.id)])
 		# namepack = self.product_id.product_tmpl_id.name + '#' + str(self.product_uom_qty) + '#' + str(self.leadtime) + '#' + self.order_id.name
 		if self.product_id.article_part_number:
-			namepack = self.product_id.article_part_number
+			namepack = self.product_id.article_part_number + ' - ' + self.incoterm.code
 		else:
-			namepack = self.product_id.name
+			namepack = self.product_id.name + ' - ' + self.incoterm.code
 		info_prod_id = self.env['product.product'].search([('name','=',namepack),('active','=',False)])
 		if not info_prod_id:
 	                vals_product = {
