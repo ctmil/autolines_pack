@@ -108,7 +108,11 @@ class sale_order_line(models.Model):
         # changed from product.template to product.product, might do that for alle the line creates in the code
 	# creates product pack
 	# name_pack = self.order_id.name + '#' + line.product_id.ntty_id + '#' + str(line.id)
-	name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
+	# name_pack = line.product_id.product_tmpl_id.name + '#' + str(line.product_uom_qty) + '#' + str(line.leadtime) + '#' + self.order_id.name
+	if line.product_id.article_part_number:
+		name_pack = line.product_id.article_part_number
+	else:
+		name_pack = line.product_id.name
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
         info_prod_id = self.env['product.product'].search([('name', '=', name_pack),('active','=',False)])
@@ -119,7 +123,7 @@ class sale_order_line(models.Model):
 			'is_pack': True,
 			'type': 'service',
 			'uom_id': 1,
-			'default_code': self.name + '#' + line.product_id.ntty_id,
+			'default_code': 'PCK ' + name_pack,
 			'weight': product_weight,
 			'sqm_pcb': sqm_pcb,
 			'taxes_id': [(6,0,[])],
@@ -273,7 +277,11 @@ class sale_order_line(models.Model):
                 sku_id = current_obj.sku_id.id
                 #sku_del = self.env['product.template'].search([('id', '=', sku_id)]).sale_delay
                 # line_exists = self.order_line.search([('product_id', '=', sku_id), ('order_id', '=', self.id)])
-		namepack = self.product_id.product_tmpl_id.name + '#' + str(self.product_uom_qty) + '#' + str(self.leadtime) + '#' + self.order_id.name
+		# namepack = self.product_id.product_tmpl_id.name + '#' + str(self.product_uom_qty) + '#' + str(self.leadtime) + '#' + self.order_id.name
+		if self.product_id.article_part_number:
+			namepack = self.product_id.article_part_number
+		else:
+			namepack = self.product_id.name
 		info_prod_id = self.env['product.product'].search([('name','=',namepack),('active','=',False)])
 		if not info_prod_id:
 	                vals_product = {
@@ -282,7 +290,7 @@ class sale_order_line(models.Model):
 				'is_pack': True,
 				'type': 'service',
 				'uom_id': 1,
-				'default_code': namepack,
+				'default_code': 'PCK ' + namepack,
 				'weight': product_weight,
 				'sqm_pcb': sqm_pcb,
 				'taxes_id': [(6,0,[])],
