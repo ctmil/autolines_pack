@@ -2,7 +2,7 @@
  <openerp>
     <data>
         <!-- Add Auto Line Rule ID field to existing view -->
-        <record model="ir.ui.view" id="product_autoline_rules_form_view">
+        <!-- record model="ir.ui.view" id="product_autoline_rules_form_view">
             <field name="name">Product.rule_ids</field>
             <field name="model">product.template</field>
             <field name="inherit_id" ref="product.product_template_form_view"/>
@@ -15,7 +15,7 @@
                     </page>
                 </notebook>
             </field>
-        </record>
+        </record -->
 
         <!-- Add a new product attribute field to existing view -->
         <!-- record model="ir.ui.view" id="product_autoline_rules_form_view">
