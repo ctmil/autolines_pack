@@ -294,7 +294,7 @@ class sale_order_line(models.Model):
 				'type': 'service',
 				'uom_id': 1,
 				'default_code': 'PCK ' + line.order_id.name + ' ' + namepack,
-				'origin_name_pack': origin_namepack,
+				'origin_name_pack': origin_name_pack,
 				'weight': product_weight,
 				'sqm_pcb': sqm_pcb,
 				'taxes_id': [(6,0,[])],
