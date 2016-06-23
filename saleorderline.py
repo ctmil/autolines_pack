@@ -29,6 +29,10 @@ import re
 
 _logger = logging.getLogger(__name__)
 
+class product_product(models.Model):
+    _inherit = 'product.product'
+
+    origin_name_pack = fields.Char(string='Origin Name Pack')
 
 class sale_order_line(models.Model):
     _inherit = 'sale.order.line'
@@ -117,6 +121,8 @@ class sale_order_line(models.Model):
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
         info_prod_id = self.env['product.product'].search([('origin_name_pack', '=', origin_name_pack),('active','=',False)])
+	if len(info_prod_id) > 1:
+		info_prod_id = info_prod_id[0]
 	if not info_prod_id:
 		vals_product = {
 			'active': False,
@@ -285,7 +291,7 @@ class sale_order_line(models.Model):
 			namepack = self.product_id.article_part_number + ' - ' + self.incoterm.code
 		else:
 			namepack = self.product_id.name + ' - ' + self.incoterm.code
-		info_prod_id = self.env['product.product'].search([('name','=',origin_name_pack),('active','=',False)])
+		info_prod_id = self.env['product.product'].search([('origin_name_pack','=',origin_name_pack),('active','=',False)])
 		if not info_prod_id:
 	                vals_product = {
 				'active': False,
