@@ -116,7 +116,7 @@ class sale_order_line(models.Model):
 		name_pack = line.product_id.name + ' - ' + line.incoterm.code
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
-        info_prod_id = self.env['product.product'].search([('name', '=', origin_name_pack),('active','=',False)])
+        info_prod_id = self.env['product.product'].search([('origin_name_pack', '=', origin_name_pack),('active','=',False)])
 	if not info_prod_id:
 		vals_product = {
 			'active': False,
@@ -124,7 +124,7 @@ class sale_order_line(models.Model):
 			'is_pack': True,
 			'type': 'service',
 			'uom_id': 1,
-			'default_code': 'PCK ' + line.order_id.name + name_pack,
+			'default_code': 'PCK ' + line.order_id.name + ' ' + name_pack,
 			'weight': product_weight,
 			'sqm_pcb': sqm_pcb,
 			'taxes_id': [(6,0,[])],
@@ -293,7 +293,8 @@ class sale_order_line(models.Model):
 				'is_pack': True,
 				'type': 'service',
 				'uom_id': 1,
-				'default_code': 'PCK ' + line.order_id.name + namepack,
+				'default_code': 'PCK ' + line.order_id.name + ' ' + namepack,
+				'origin_name_pack': origin_namepack,
 				'weight': product_weight,
 				'sqm_pcb': sqm_pcb,
 				'taxes_id': [(6,0,[])],
