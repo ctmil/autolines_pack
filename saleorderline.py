@@ -91,25 +91,29 @@ class sale_order_line(models.Model):
         _logger.info('%s Customer Autolines', len(customer_autolines_obj))
 	autolines_log = autolines_log + str(len(customer_autolines_obj)) + ' Customer Autolines\n'
         if len(customer_autolines_obj) > 0:
-            self._check_rule(customer_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
+            autolines_log = self._check_rule(customer_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line, \
+		autolines_log)
 
         product_ctg_autolines_obj = self.env['autoline.autoline'].search([('product_ctg_id', '=', product_ctg_id), ('active', '=', True), ('sales_purchase', '=', True)])
         _logger.info('%s Product CTG Autolines', len(product_ctg_autolines_obj))
 	autolines_log = autolines_log + str(len(product_ctg_autolines_obj)) + ' Product CTG Autolines\n'
         if len(product_ctg_autolines_obj) > 0:
-            self._check_rule(product_ctg_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
+            autolines_log = self._check_rule(product_ctg_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line,\
+		autolines_log)
 
         product_autolines_obj = self.env['autoline.autoline'].search([('product_id', '=', line_prod_id), ('sales_purchase', '=', True)])
         _logger.info('%s Product Autolines', len(product_autolines_obj))
 	autolines_log = autolines_log + str(len(product_autolines_obj)) + ' Product Autolines\n'
         if len(product_autolines_obj) > 0:
-            self._check_rule(product_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
+            autolines_log = self._check_rule(product_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line,\
+		autolines_log)
 
         company_wide_autolines_obj = self.env['autoline.autoline'].search([('active', '=', True), ('company_wide', '=', True), ('sales_purchase', '=', True)])
         _logger.info('%s Company Wide Autolines', len(company_wide_autolines_obj))
 	autolines_log = autolines_log + str(len(company_wide_autolines_obj)) + ' Company Wide Autolines\n'
         if len(company_wide_autolines_obj) > 0:
-            self._check_rule(company_wide_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
+            autolines_log = self._check_rule(company_wide_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line,\
+		autolines_log)
 
         # this one is a special one...
         supplier_name = self.env['res.partner'].browse(supplier_id).name
@@ -194,7 +198,7 @@ class sale_order_line(models.Model):
         #self._add_todo_lines
 
     @api.multi
-    def _check_rule(self, autoline_objects, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line = None):
+    def _check_rule(self, autoline_objects, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line = None, autolines_log=None):
         res = False
 	product_weight = self.product_id.weight
 	sqm_pcb = self.product_id.sqm_pcb
@@ -205,6 +209,7 @@ class sale_order_line(models.Model):
                 if not rule.active is True:
                     continue
                 _logger.info('Autoline %s, running rule %s', current_obj.name, rule.name)
+                autolines_log = autolines_log + 'Autoline %s, running rule %s'%(current_obj.name, rule.name)
                 operator = rule.operator
                 value_to_check = rule.chk_value
                 field = rule.model_field
@@ -217,9 +222,10 @@ class sale_order_line(models.Model):
                     try:
                         obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', customer_id)])
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', customer_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
+                        autolines_log = autolines_log + 'Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s'%(str(model.model), self.env[str(model.model)].search([('id', '=', customer_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
-                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
+			autolines_log = autolines_log + 'Error occured checking rule name %s in autoline %s'%(rule.name,current_obj.name)
 
                 elif model.model == 'res.partner' and partner_subset == 'supplier':
                     try:
@@ -227,23 +233,25 @@ class sale_order_line(models.Model):
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', supplier_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
-                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
+			autolines_log = autolines_log + 'Error occured checking rule name %s in autoline %s'%(rule.name,current_obj.name)
 
                 elif model.model == 'product.template':
                     try:
                         obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', line_prod_id)])
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', line_prod_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
+                        autolines_log = autolines_log + 'Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s'%(str(model.model), self.env[str(model.model)].search([('id', '=', line_prod_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
-                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
+			autolines_log = autolines_log + 'Error occured checking rule name %s in autoline %s'%(rule.name,current_obj.name)
 
                 elif model.model == 'product.category':
                     try:
                         obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', product_ctg_id)])
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', product_ctg_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
+                        autolines_log = autolines_log + 'Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s'% (str(model.model), self.env[str(model.model)].search([('id', '=', product_ctg_id)]).name, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
-                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
+			autolines_log = autolines_log + 'Error occured checking rule name %s in autoline %s'%(rule.name,current_obj.name)
 
                 elif model.model == 'sale.order.line':
                     try:
@@ -264,11 +272,12 @@ class sale_order_line(models.Model):
                         #_logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
-                        print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
+			autolines_log = autolines_log + 'Error occured checking rule name %s in autoline %s'%(rule.name,current_obj.name)
                 elif model.model == 'sale.order':
                     try:
                         obj = self.env[str(model.model)].search([(str(field.name), str(operator), str(value_to_check)), ('id', '=', self.order_id.id)])
                         _logger.info('Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s', str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
+                        autolines_log = autolines_log + 'Model: %s , Model entity; %s , Field: %s , Operator: %s , Value to Check: %s , Result: %s'% (str(model.model), self.env[str(model.model)].search([('id', '=', self.id)]).id, field.name, operator, value_to_check, str(len(obj) > 0))
                     except ValueError:
                         _logger.info('Error occured checking rule name %s in autoline %s', rule.name, current_obj.name)
                         print 'Error occured checking rule name ', rule.name, ' in auto line ', current_obj.name
@@ -290,6 +299,7 @@ class sale_order_line(models.Model):
             if res:
                 # do not add lines that are already added
                 _logger.info('DEBUG: SKU added: ID %s, NAME %s, DELAY %s', current_obj.sku_id.id, current_obj.sku_id.name, current_obj.sku_id.sale_delay)
+                autolines_log = autolines_log + 'DEBUG: SKU added: ID %s, NAME %s, DELAY %s' % (current_obj.sku_id.id, current_obj.sku_id.name, current_obj.sku_id.sale_delay)
                 sku_id = current_obj.sku_id.id
                 #sku_del = self.env['product.template'].search([('id', '=', sku_id)]).sale_delay
                 # line_exists = self.order_line.search([('product_id', '=', sku_id), ('order_id', '=', self.id)])
@@ -362,6 +372,6 @@ class sale_order_line(models.Model):
             print "Done with ", current_obj.name
         else:
             print "No rules to apply"
-
+	return autolines_log
 
 
