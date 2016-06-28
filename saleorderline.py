@@ -185,10 +185,9 @@ class sale_order_line(models.Model):
 	
         _logger.info('Comments - Done')
 	autolines_log = autolines_log + 'Comments - Done\n'
-	import pdb;pdb.set_trace()
 	vals = {
 		'pack_id': info_prod_id.id,
-		'autolines_log': autolines_log
+		'autoline_log': autolines_log
 		}
 	self.write(vals)
 	return info_prod_id.id
