@@ -89,25 +89,25 @@ class sale_order_line(models.Model):
         # get the Auto Lines used by these objects.
         customer_autolines_obj = self.env['autoline.autoline'].search([('customer_id', '=', customer_id), ('active', '=', True), ('sales_purchase', '=', True)])
         _logger.info('%s Customer Autolines', len(customer_autolines_obj))
-	autolines.log = autolines_log + str(len(customer_autolines_obj)) + ' Customer Autolines\n'
+	autolines_log = autolines_log + str(len(customer_autolines_obj)) + ' Customer Autolines\n'
         if len(customer_autolines_obj) > 0:
             self._check_rule(customer_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
 
         product_ctg_autolines_obj = self.env['autoline.autoline'].search([('product_ctg_id', '=', product_ctg_id), ('active', '=', True), ('sales_purchase', '=', True)])
         _logger.info('%s Product CTG Autolines', len(product_ctg_autolines_obj))
-	autolines.log = autolines_log + str(len(product_ctg_autolines_obj)) + ' Product CTG Autolines\n'
+	autolines_log = autolines_log + str(len(product_ctg_autolines_obj)) + ' Product CTG Autolines\n'
         if len(product_ctg_autolines_obj) > 0:
             self._check_rule(product_ctg_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
 
         product_autolines_obj = self.env['autoline.autoline'].search([('product_id', '=', line_prod_id), ('sales_purchase', '=', True)])
         _logger.info('%s Product Autolines', len(product_autolines_obj))
-	autolines.log = autolines_log + str(len(product_autolines_obj)) + ' Product Autolines\n'
+	autolines_log = autolines_log + str(len(product_autolines_obj)) + ' Product Autolines\n'
         if len(product_autolines_obj) > 0:
             self._check_rule(product_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
 
         company_wide_autolines_obj = self.env['autoline.autoline'].search([('active', '=', True), ('company_wide', '=', True), ('sales_purchase', '=', True)])
         _logger.info('%s Company Wide Autolines', len(company_wide_autolines_obj))
-	autolines.log = autolines_log + str(len(company_wide_autolines_obj)) + ' Company Wide Autolines\n'
+	autolines_log = autolines_log + str(len(company_wide_autolines_obj)) + ' Company Wide Autolines\n'
         if len(company_wide_autolines_obj) > 0:
             self._check_rule(company_wide_autolines_obj, customer_id, supplier_id, line_prod_id, product_ctg_id, q, weight, line)
 
@@ -126,7 +126,7 @@ class sale_order_line(models.Model):
 		name_pack = line.product_id.name + ' - ' + line.incoterm.code
         info_prd_id = self.env['product.product'].search([('name', '=', 'info:')])
 	info_prd_id = info_prd_id[0].id
-        info_prod_id = self.env['product.product'].search([('origin_name_pack', origin_name_pack),('active','=',False)])
+        info_prod_id = self.env['product.product'].search([('origin_name_pack','=',origin_name_pack),('active','=',False)])
 	if len(info_prod_id) > 1:
 		info_prod_id = info_prod_id[0]
 	if not info_prod_id:
@@ -185,6 +185,7 @@ class sale_order_line(models.Model):
 	
         _logger.info('Comments - Done')
 	autolines_log = autolines_log + 'Comments - Done\n'
+	import pdb;pdb.set_trace()
 	vals = {
 		'pack_id': info_prod_id.id,
 		'autolines_log': autolines_log
