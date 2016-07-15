@@ -116,6 +116,11 @@ class sale_order_line(models.Model):
 		autolines_log)
 
         _logger.info('Comments - Done')
+	if self.product_id.article_part_number:
+		namepack = self.product_id.article_part_number + ' - ' + self.incoterm.code
+	else:
+		namepack = self.product_id.name + ' - ' + self.incoterm.code
+	info_prod_id = self.env['product.product'].search([('origin_name_pack','=',origin_name_pack),('active','=',False)])
 	autolines_log = autolines_log + 'Comments - Done\n'
 	vals = {
 		'pack_id': info_prod_id.id,
