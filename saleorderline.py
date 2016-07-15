@@ -129,7 +129,16 @@ class sale_order_line(models.Model):
 		'autoline_log': autolines_log
 		}
 	self.write(vals)
-	return info_prod_id.id
+	origin_name_pack = self.order_id.name + '#' + self.product_id.ntty_id + '#' + str(self.id)
+	if self.product_id.article_part_number:
+		namepack = self.product_id.article_part_number + ' - ' + self.incoterm.code
+	else:
+		namepack = self.product_id.name + ' - ' + self.incoterm.code
+	info_prod_id = self.env['product.product'].search([('origin_name_pack','=',origin_name_pack),('active','=',False)])
+	if info_prod_id:
+		return info_prod_id.id
+	else:
+		return None
         #self._add_todo_lines
 
     @api.multi
